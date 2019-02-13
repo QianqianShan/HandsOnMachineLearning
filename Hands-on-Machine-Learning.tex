@@ -1,0 +1,183 @@
+\documentclass[12pt,oneside,a4paper]{article}
+\usepackage{amssymb} % blackbaord bold 
+\usepackage{amsmath} % for modulo function
+
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{csvsimple}
+\usepackage{placeins}
+\usepackage{array}
+\usepackage{mathrsfs}%花体字母
+\usepackage{amssymb}%花体字母加粗
+%\usepackage{undertilde}
+\usepackage{stackengine}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% with this we ensure that the chapter and section
+% headings are in lowercase.
+%\rhead{ \thesection}
+%\lhead{}
+%\rhead{\fontsize{14}{14}\leftmark}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{\fontsize{9}{12} \selectfont \leftmark}
+
+\graphicspath{{Images/}}
+
+\numberwithin{equation}{section}
+
+\newcommand{\ud}{\mathrm{d}} %mathrm d for integration 
+\newcommand{\RN}[1]{
+	\textup{\uppercase\expandafter{\romannumeral#1}}
+}
+\newcommand{\utilde}{\underset{\sim}}
+\newcommand{\bfr}{\boldsymbol{r}}
+\newcommand{\bfu}{\boldsymbol{u}}
+\newcommand{\bfv}{\boldsymbol{v}}
+\newcommand{\bfx}{\boldsymbol{x}}
+\newcommand{\bfz}{\boldsymbol{z}}
+\newcommand{\bfy}{\boldsymbol{y}}
+
+\newcommand{\bfA}{\boldsymbol{A}}
+\newcommand{\bfB}{\boldsymbol{B}}
+\newcommand{\bfD}{\boldsymbol{D}}
+\newcommand{\bfI}{\boldsymbol{I}}
+
+\newcommand{\bfQ}{\boldsymbol{Q}}
+
+\newcommand{\bfR}{\boldsymbol{R}}
+\newcommand{\bfS}{\boldsymbol{S}}
+\newcommand{\bfU}{\boldsymbol{U}}
+\newcommand{\bfV}{\boldsymbol{V}}
+\newcommand{\bfX}{\boldsymbol{X}}
+\newcommand{\bfY}{\boldsymbol{Y}}
+\newcommand{\bfZ}{\boldsymbol{Z}}
+
+\newcommand{\bfGamma}{\boldsymbol{\Gamma}}
+\newcommand{\bfSigma}{\boldsymbol{\Sigma}}
+
+\newcommand{\argmin}[1]{\stackunder{\textrm{argmin }}{\scriptsize$#1$}}
+\newcommand{\argmax}[1]{\stackunder{\textrm{argmax }}{\scriptsize$#1$}}
+\newcommand{\rmmax}[1]{\stackunder{\textrm{max}}{\scriptsize$#1$}}
+\newcommand{\rmmin}[1]{\stackunder{\textrm{min}}{\scriptsize$#1$}}
+\newcommand{\Corr}{\textrm{Corr}}
+\newcommand{\Var}{\textrm{Var}}
+
+
+
+\newcommand\tenq[2][1]{%
+	\def\useanchorwidth{T}%
+	\ifnum#1>1%
+	\stackunder[0pt]{\tenq[\numexpr#1-1\relax]{#2}}{\scriptscriptstyle\sim}%
+	\else%
+	\stackunder[1pt]{#2}{\scriptscriptstyle\sim}%
+	\fi%
+}
+
+
+\newcommand{\bftheta}{\boldsymbol{\theta}} %boldface theta 
+\newcommand{\bfbeta}{\boldsymbol{\beta}}
+\newcommand{\bfmu}{\boldsymbol{\mu}}
+\newcommand{\checkbeta}[1]{\check{\beta}_{#1}}
+
+\newcommand{\U}[1]{U_{(#1)}}
+\newcommand{\uu}[1]{u_{(#1)}}
+\newcommand{\order}[2]{#1_{(#2)}}
+\newcommand{\rE}{\textrm{E}}
+\newcommand{\rms}[1]{\textrm{#1}}
+\newcommand{\wh}[1]{\widehat{#1}}
+\author{Qianqian Shan}
+\title{Studying \emph{Hands-on Machine Learning with Scikit-Learn and Tensorflow} by Aurelien Geron}
+\date{\vspace{-5ex}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\def\baselinestretch{1.0}
+\renewcommand{\arraystretch}{.8}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section*{Preface}
+The following contents contain study notes of Qianqian Shan for book \emph{Hands-on Machine Learning with Scikit-Learn and Tensorflow}. To learn more about the book, please see  \href{http://shop.oreilly.com/product/0636920052289.do}{http://shop.oreilly.com/product}. 
+\section{The Machine Learning (ML) Landscape}
+
+\subsection{Introduction}
+Machine learning is the filed of study that gives computers the ability to learn without being explicitly programmed. --- Arthur Samuel, 1959\\~\\
+
+Reasons for using ML: 
+\begin{itemize}
+\item The programming could be shorter, easier to maintain and most likely more accurate. For example, the build of a spam filter. Save time of hand-tuning or long lists of rules.
+\item There are problems that either too complex for traditional approaches (for example, speech recognition) or have no known algorithm. 
+
+\item ML can adapt to new data (fluctuating environments). 
+\item $\cdots$
+\end{itemize}
+\subsection{Types of ML Systmes} 
+
+\begin{itemize}
+\item Based on whether or not there are human supervision: 
+\begin{enumerate}
+\item Supervised learning: each training data point has a label/solution ($y$). Typical learning task includes classification and regression. 
+\item Unsupervised learning: training data are unlabeled. Learning algorithms include 
+\begin{enumerate}
+\item Clustering (k-means, hierarchical clustering, EM algorithm)
+\item \emph{Visualization and dimension reduction} (principal component analysis (PCA), kernel PCA, locally-linear embedding(LLE)
+\item Association rule learning (apriori, eclat)
+\item Anomaly detection: for example, detect usual transactions, defects of products, outliers of a data set and so on.  
+\end{enumerate}
+\item Semi-supervised: training data are partially labeled. For example, for photo-hosting services, there is only one label per person but may have multiple photos per person that could be clustered. Most semi-supervised learning algorithms are combinations of unsupervised and supervised algorithms.
+\item Reinforcement Learning: very \textbf{different} with other types. The learning system (agent) can observe the environment and perform actions, and get \emph{rewards} in tern (or \emph{penalties} for negative rewards). It learns by itself for best strategy (policy) to get the most reward over time. For example, Deepmind's AlphaGo.
+\end{enumerate}
+
+\item Based on whether or not ML systems can learn incrementally on the fly:
+\begin{enumerate}
+\item Online: train the system incrementally by \emph{feeding it data sequentially}, either individually or by small groups called \emph{mini-batch}. 
+\begin{enumerate}
+\item Each step is fast and cheap
+\item Great for systems that receive data as a continuous flow and need to adapt to changes rapidly or autonomously. 
+\item Great when there is limited computing power/huge datasets
+\item One concern is: how fast the algorithm should adapt to changing data (learning rate). If too fast, it will quickly forget old data; if too slow, it will have more inertia.
+\item Cons: If bad data were fed to system, the performance will decline.  
+\end{enumerate} 
+\item Batch learning : also called offline learning. The system is trained with only available data and launched with learning anymore. 
+\end{enumerate}
+
+\item Based on whether or not ML systems work by simply comparing with known data or detect patterns by training data with models 
+\begin{enumerate}
+\item Instance-based: the system learns the examples by heart (no model), and generalizes to new cases with a \emph{similarity measure}. 
+\item Model-based: build a model of these examples, then use that to make \emph{predictions}. 
+\end{enumerate}
+\end{itemize}
+\subsection{Main Challenges of ML}
+\begin{enumerate}
+\item Bad algorithm
+
+\item Bad data 
+\begin{itemize}
+\item Insufficient quantity of training data, especially for more complex problems such as image or speech recognition.
+\item Training data are not representative (don't generalize well).
+\item Poor quality data (errors, outliers, noise due to poor quality measurements and so on).
+\item Irrelevant features. The success of ML project is related to feature engineering: 
+\begin{itemize}
+\item Feature selection 
+\item Feature extraction: combine existing features to produce more useful ones 
+\item Create new features by gathering new data
+\end{itemize}
+\item Overfitting of data: model performs well on training data but does not generalize well. It usually happens when the model is too complex relative to the amount of noise of the training data. Possible solutions 
+\begin{itemize}
+\item Simplify the model by selecting fewer parameters / reducing number of attributes in the training data / constraining the model (regularization).
+\item Gather more training data 
+\item Reduce noise in the training data (fix data errors and remove outliers).
+\end{itemize}
+\item Underfitting the training data.
+\end{itemize}
+\end{enumerate}
+\subsection{Testing and Validation}
+\begin{enumerate}
+\item \emph{Testing}: split data into training set and test set and use test set to check how well the model fits. 
+
+\item \emph{Validation}: use validation to choose hyperparameters of the model. Common technique is \emph{cross validation}.
+\end{enumerate}
+\end{document}
+
