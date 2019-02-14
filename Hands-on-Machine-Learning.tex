@@ -179,5 +179,59 @@ Reasons for using ML:
 
 \item \emph{Validation}: use validation to choose hyperparameters of the model. Common technique is \emph{cross validation}.
 \end{enumerate}
+
+\section{End-to-End Machine Learning Project}
+Go through an example project. 
+\begin{enumerate}
+\item Look at the big picture 
+\begin{enumerate}
+\item Frame the problem
+\begin{enumerate}
+\item What is the \emph{business objective}? How does company expect to use and benefit from this model? 
+\item Think about your component within an ml pipeline (a data \emph{pipeline} is a sequence of data processing components).
+\end{enumerate}
+\item Select a performance measure: 
+\begin{enumerate}
+\item Root mean square error (RMSE) / $\mathcal{L}_2$ norm
+\begin{equation}
+RMSE(X, h) = \sqrt{\frac{1}{m} \sum_{i=1}^{m}\left[h(\bfx_{i}) - y_{i}\right]^2}
+\end{equation}
+
+\item Mean absolute error (MAE) / $\mathcal{L}_1$ norm
+\begin{equation}
+MAE(X, h) =\frac{1}{m} \sum_{i=1}^{m}|h(\bfx_{i}) - y_{i}|
+\end{equation}
+\item $\mathcal{L}_k$ norm, for a vector $\bfv$ of length $n$,
+\begin{equation}
+||\bfv||_k = \left[|v_1|^k + \cdots + |v_n|^k\right]^{\frac{1}{k}}
+\end{equation}
+The higher the norm index, the more it focuses on \emph{large values}. So RMSE is more sensitive to outliers than MAE.
+\end{enumerate}
+\item Check assumptions that have been made before proceeding. 
+\end{enumerate}
+\item Get the data \\
+Create test set before exploring any patterns on the data possibly on the test set.
+\begin{enumerate}
+\item Random sampling
+\item Stratified sampling
+\end{enumerate}
+\item Discover and visualize the data to gain insights, see jupyter notebook of chapter 2 at \href{https://github.com/QianqianShan/HandsOnMachineLearning}{my Github}. 
+\item Prepare the data for ml algorithms 
+\begin{enumerate}
+\item Deal with missing values (drop data with NA values; drop columns with NA values; impute the missing values)
+\item Convert categorical variables to numerical (code different categories with reasonable numerical values; binary coding (0-1))
+\item Scaling 
+\begin{enumerate}
+\item Min-max scaling (normalization), shift and rescale data so they end up ranging from 0 to 1 (or other ranges). 
+\item Standardization: subtracts mean and divide standard deviation. Ranges may not be 0 to 1, but more robust to outliers.
+\end{enumerate}
+\end{enumerate}
+\item Select a model and train it : use cross validation. 
+\item Fine-tune model: tune hyperparamters; use ensemble methods; analyze the best models and evaluate the system on test set.  
+\item Present solution
+\item Launch, monitor and maintain your system 
+\end{enumerate} 
+
+\section{Classfication}
 \end{document}
 
