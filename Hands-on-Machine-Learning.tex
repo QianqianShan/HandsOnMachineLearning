@@ -233,5 +233,83 @@ Create test set before exploring any patterns on the data possibly on the test s
 \end{enumerate} 
 
 \section{Classfication}
+
+\subsection{Performance measures}
+\begin{enumerate}
+\item Measuring \emph{accuracy} with \emph{cross-validation}. Accuracy is not preferred as performance measure especially when data are skewed. 
+
+\item Confusion matrix. Count the number of times misclassified, each row represents actual class and each column represents a predicted class as in Table~\ref{confusion}.
+\begin{table}[h]
+	\centering
+	\begin{tabular}{p{2.5cm}p{2cm}p{2cm}}
+		Predicted (H) Observed (V)	&  Positive  & Negative \\
+		\hline 
+		Postive & TP & FN \\
+		\hline 
+		Negative & FP & TN \\
+		\hline 
+		
+	\end{tabular}
+	\caption{Confusion matrix.}
+	\label{confusion}
+\end{table}
+
+\item Precision and recall tradeoff.\\
+
+
+\begin{equation*}
+accuracy = \frac{TP + TN}{TP + TN + FP + FN}.
+\end{equation*}
+
+\begin{equation*}
+precision = \frac{TP}{TP + FP},
+\end{equation*}
+precision is the accuracy of the positive predictions.
+
+\begin{equation*}
+recall = \frac{TP}{TP + FN},
+\end{equation*}
+recall is also called sensitivity, or true positive rate (TPR): the ratio of positive instances that are correctly detected by the classifier. 
+
+\begin{itemize}
+\item It's convenient to combine precision and recall into a single metric, $F_1$, the harmonic mean of precision and recall: 
+
+\begin{equation*}
+F_1 = \frac{2}{\frac{1}{precision} + \frac{1}{recall}}.
+\end{equation*}
+
+\item $F_1$ score favors classifiers that have similar precision and recall. But this is not always what we want. 
+
+\item Increasing precision reduces recall and vice versa. 
+\end{itemize}
+
+\item ROC curve 
+
+\begin{enumerate}
+\item Receiver operating characteristic (ROC) curve is used with binary classifiers. It's true positive rate $TP/(TP + FN)$ vs false postive rate $FP/(TN + FP)$.
+\item One way to compare the classifiers is to measure the area under curve (AUC). A perfect classifier has ROC AUC equals $1$.
+
+\item Rule of thumb to choose between precision/recall (PR) curve and ROC: when you care more about false positives than the false negatives, you should prefer PR curve. 
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Multiclass classification}
+\begin{enumerate}
+\item Some algorithms such as random forest, naive Bayes can handle multiple classes directly. 
+\item One vs. all strategy: train multiple binary classifiers for each class. 
+
+\item One vs. one: train a binary classifier for every pair of digits. Each classifier only needs to be trained on the part of training data set for the two classes to be distinguished.
+\end{enumerate}
+
+\textbf{Note}: One vs. one algorithm is preferred when the size of training data set is poorly scaled.  Otherwise, one vs. all is preferred. 
+\subsection{Error analysis}
+
+Make predictions on the training set, analyze the confusion matrix. 
+\subsection{Multi-label classification}
+
+\subsection{Multi-output classification}
+A generalization of multilabel classification where each label can be multiclass. 
+
+\section{Train Linear Regression Models}
 \end{document}
 
