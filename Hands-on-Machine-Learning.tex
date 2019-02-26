@@ -311,5 +311,52 @@ Make predictions on the training set, analyze the confusion matrix.
 A generalization of multilabel classification where each label can be multiclass. 
 
 \section{Train Linear Regression Models}
+\subsection{Linear Regression}
+See Chapter 3 of \href{https://qianqianshan.com/post/elementsofstatisticallearning/}{https://qianqianshan.com/post/esl} for the linear regression background. The computational complexity of finding the inverse of $X^TX$ is typically $O(n^{2.4})$ to $O(n^3)$, so solving the model parameters via solving normal equations will be computationally expensive when the data size or number of features is large. It leads to \emph{gradient descent}.
+\subsection{Gradient Descent (GD)}
+GD is a generic optimization algorithm of finding optimal solutions to a wide range of problems. The idea is: tweak parameters iteratively in order to minimize a cost function.
+
+\begin{equation}
+\theta_{i+1} = \theta_i - \eta \nabla_{\theta_i} MSE(\theta)
+\end{equation}
+\begin{enumerate}
+\item  To find a good learning rate $\eta$, use grid search. Batch gradient descent with a fixed learning rate has a convergence rate $O(\frac{1}{iterations})$.
+
+\item \emph{Stochastic gradient descent}: pick a random instance in the training set at every step and computes the gradients based ONLY on that single instance. 
+
+\begin{enumerate}
+\item SGD is much faster. 
+\item Can be used to train huge training sets. 
+\item The cost function will bounce up and down, decreasing only on average. 
+\item Has a better chance to find the global minimum than batch GD.
+\item Use \emph{simulated annealing} to gradually reduce the learning rate so the algorithm can settle at the minimum.
+\end{enumerate}
+
+\item Mini-batch gradient descent computes the gradients on small random sets of instances.
+\end{enumerate}
+
+\subsection{Model Generalization Performance Evaluation}
+\begin{enumerate}
+\item Cross-validation: tell if the model is overfitting or underfitting.
+\item Learning curves: plots of models' performance (eg. RMSE) on the training set and the validation set as function of the training set size.
+\begin{enumerate}
+\item If the curves for training and validation sets are close and fairly high, there is an indication of \emph{underfitting}.
+\item If the training error is much lower, and there is a gap between the curves, there is an indication of \emph{overfitting}.
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Regularized Linear Models}
+See Chapter 3 of \href{https://qianqianshan.com/post/elementsofstatisticallearning/}{https://qianqianshan.com/post/esl} for regularization and logistic regression.
+
+
+\subsection{Logistic Regression}
+Generalize logistic regression to support \emph{multiple classes} directly without training and combining multiple binary classifiers. That is, \emph{softmax regression or multinomial logistic regression}.
+
+Cross entropy cost function is minimized 
+\begin{equation}
+J(\Theta) = - \frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K} y_k^{i} \log (\hat{p}_k^i).
+\end{equation}
+
+\section{Support Vector Machines}
 \end{document}
 
