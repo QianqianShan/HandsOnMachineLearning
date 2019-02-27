@@ -357,6 +357,56 @@ Cross entropy cost function is minimized
 J(\Theta) = - \frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K} y_k^{i} \log (\hat{p}_k^i).
 \end{equation}
 
-\section{Support Vector Machines}
+\section{Support Vector Machines (SVM)}
+SVM is capable of performing linear/nonlinear classification, regression, and even outlier detection. It's well suited for small- or medium-sized datasets.
+\subsection{Linear SVM Classification}
+It's also called largest margin classification: SVM classifier fit the widest street between classes.
+
+\begin{enumerate}
+\item \emph{Support vectors}: instances located on the edge of the ``street'' fully determines (supports) the decision boundary. 
+\item SVMs are sensitive to feature scales. 
+\end{enumerate}
+Types of linear SVM:
+\begin{enumerate}
+\item Hard margin classification: all instances are off the street (margin) and on the correct side. 
+\begin{enumerate}
+\item works only if the data is linearly separable.
+\item Sensitive to outliers.
+\end{enumerate}
+
+\item Soft margin classification: find a good balance between keeping the street as large as possible and \emph{limiting the margin violations} (instances in the middle of the street or on the wrong side). Introduce slack variable $\epsilon_i$ for each instance for the conditions of the optimization problem.
+\end{enumerate}
+\subsection{Nonlinear SVM Classification}
+
+\begin{enumerate}
+\item Create polynomial features for linearly separable classification under new feature space. Cons: can create a huge number of features with higher degree and more features. 
+\item Polynomial kernel:  Pros: no combinatorial explosion of the number of features since you don't actually add any features.
+
+\item Add similarity features: add features computed using similarity function that measures how much each instance resembles a particular \emph{landmark}.
+\begin{equation}
+\phi_\gamma (x, l) = \textrm{exp}\left[-\gamma \cdot ||x - l||^2\right],
+\end{equation}
+where $l$ is the landmark location. Cons: may be computational expensive when the training set is large and more landmarks.
+
+\item Gaussian radial basis kernel makes it possible to obtain a similar result as if may similarity features are added, without actually having to add the features. 
+\end{enumerate}
+\subsection{SVM Regression}
+
+SVMR tries to fit as many instances as possible \emph{on the street} while limiting the margin violations (i.e., instances off the street), and the width of the street is controlled by a hyper-parameter.
+
+\subsection{Outlier detection}
+See \href{https://scikit-learn.org/stable/modules/outlier_detection.html}{$scikit-learn.org/stable/modules/outlier\_detection.html$} for details on outlier detection with scikit-learn. The idea is: the outliers/anomalies cannot form a dense cluster as available estimators assume that the outliers/anomalies are located in low density regions, is unsupervised anomaly detection.
+
+\subsection{Hinge loss}
+For soft margin maximization, add relaxation/slack factor $\epsilon_i$ for each $i$
+\begin{equation}
+\argmin{w,b}\frac{1}{2}||\beta||^2 + c \sum_{i=1}^{n}\epsilon_i\textrm{ with } y_i(w^T\Phi(x_i) + b) \ge 1 - \epsilon_i,
+\end{equation}
+that is, $\epsilon_i \ge 1- y_i(w^T\Phi(x_i) + b) $, which results in hinge loss
+\begin{equation}
+\rmmax{}(0, 1- y_i(w^T\Phi(x_i) + b)).
+\end{equation}
+
+\section{Decision Trees}
 \end{document}
 
