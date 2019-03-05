@@ -408,5 +408,86 @@ that is, $\epsilon_i \ge 1- y_i(w^T\Phi(x_i) + b) $, which results in hinge loss
 \end{equation}
 
 \section{Decision Trees}
+Decision trees are versatile and also the fundamental components of random forests. 
+
+Decision trees are NOT \textbf{scale sensitive}.
+
+\begin{enumerate}
+\item CART (classification and regression tree) Algorithm: first splits the training set in two subsets using a single feature $k$ and a threshold $t_k$ (pairs $(k, t_k)$ are chosen so that purest subsets are produced). \emph{CART is a greedy algorithm, which searches for optimal splits at the top level, and then repeats the process at each level.} CART often produces a reasonably good solution, but not guaranteed as optimal.
+
+\begin{enumerate}
+\item CART cost function for classification: 
+\begin{equation}
+J(k, t_k) = \frac{n_{left}}{n} G_{left} + \frac{n_{right}}{n} G_{right},
+\end{equation}
+where $G_{i}$ is the impurity of subsets, $n_{i}$ is the number of instances in subsets, and $n$ is the total instances.
+
+\item CART cost function for regression: 
+\begin{equation}
+J(k, t_k)= \frac{n_{left}}{n} MSE_{left} + \frac{n_{right}}{n} MSE_{right},
+\end{equation}
+where $MSE_{node} = \sum_{i \in node} (y_i - \wh{y}_{node})^2$ and $\wh{y}_{node} = \frac{1}{n_{node}}\sum_{i \in node} y_i$.
+\end{enumerate}
+
+\item Complexity:
+\begin{enumerate}
+\item Prediction: $O(\log(n))$ to traverse the tree.
+\item Training: With $K$ features, it requires to compare all features on all samples at each node, that is, $O(K \times n \log n)$.
+\end{enumerate}
+
+\item Impurity measure in the cost function for classification: 
+\begin{enumerate}
+\item Gini impurity
+\begin{equation}
+G_i = 1 - \sum_{k=1}^{K} p_{i, k}^2,
+\end{equation}
+where $p_{i,k}$ is the ratio of class $k$ instances in node $i$.
+
+\item Entropy impurity
+\begin{equation}
+H_i = - \sum_{k=1, p_{i, k} \neq 0}^{K} p_{i,k} \log p_{i,k}.
+\end{equation}
+Comparison:
+\begin{itemize}
+\item  Most of the time the two measures don't make a big difference. 
+\item  Gini impurity is slightly faster to compute. 
+\item When they differ, Gini tends to isolate the most frequent class in its own branch of the tree. Entropy tends tends to produces more balanced trees.
+\end{itemize}
+\end{enumerate}
+\item Regularization: decision trees make very few assumptions about the training data, and left the tree structure unconstrained, so most likely to get overfit. So it's often called as \emph{nonparametric} model given that \emph{the number of parameters is not determined prior to training}.
+\begin{enumerate}
+\item Method 1: Use the test data, plot the correct classification rate on training data and test data vs. size/depth... of the tree. Restrict maximum depth, min samples of leaf, max leaf nodes and so on. 
+\item Method 2: Pruning. First train the tree without restriction, then prune unnecessary nodes with statistical tests such as chi-square test or reduction in variance standards and so on. See details \href{https://medium.com/@rishabhjain_22692/decision-trees-it-begins-here-93ff54ef134}{here}.
+
+\end{enumerate}
+\item Issues:
+\begin{enumerate}
+\item Sensitive to training set rotation: decision trees love orthogonal decision boundaries (splits are perpendicular to an axis). \emph{Solution}: may use PCA to obtain a better orientation of the data. 
+
+\item Very sensitive to small variations in the training data, especially when a stochastic method is used to train the data. \emph{Solution}: random forest.
+\end{enumerate}
+\end{enumerate}
+
+
+\section{Ensemble Learning and Random Forests}
+
+\subsection{Voting classifiers}
+
+\subsection{Bagging and Pasting}
+
+\subsection{Random Patches and Random Subspaces}
+
+\subsection{Random Forests}
+
+\subsection{Boosting} 
+
+\subsection{Stacking}
+
+
+\section{Dimensionality Reduction}
+
+\subsection{PCA}
+
+\subsection{Manifold Learning}
 \end{document}
 
