@@ -598,7 +598,23 @@ DR can be used to
 \end{itemize}
 
 \subsection{PCA}
-
+\begin{itemize}
+\item SVD 
+\item Reduce dimension 
+\item (Image) compression
+\item Incremental PCA: split the training set into mini-batches and feed an IPCA algorithm one mini-batch at a time (solve the problem that data size may be too big to fit in the memory).
+\item Randomized PCA: use a stochastic algorithm to quickly find an approximation of the first $d$ principal components. 
+\item Kernel PCA: perform nonlinear projections. Good at preserving clusters of instances after projection. 
+\end{itemize}
 \subsection{Manifold Learning}
+Definition: a $d$-dimensional manifold is a part of an $n$-dimensional space ($d < n$) that locally resembles a $d$-dimensional hyperplane. For example, a 2d manifold is a 2d shape that can be bent and twisted in a higher-dimensional space ($d = 2, n = 3$).
+\\~\\
+Assumption: 
+\begin{itemize}
+\item The high-dim data sets lie close to a lower-dim manifold. 
+\item The task at hand (e.g., classification and regression) will be simpler if expressed in the lower-dim space of the manifold.
+\end{itemize}
+
+One technique: locally linear embedding (LLE), a non-linear dimensionality reduction.
 \end{document}
 
