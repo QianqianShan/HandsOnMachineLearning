@@ -471,20 +471,131 @@ Comparison:
 
 \section{Ensemble Learning and Random Forests}
 
-\subsection{Voting classifiers}
+Intuition: Wisdom of the crowd. Even if each classifier is weak (only slightly better than random guessing), the ensemble can still be a strong learner, provided there are \emph{a sufficient number} of weak learners and \emph{sufficiently diverse}.\\~\\
+Law of large numbers: if you keep tossing a biased coin, the ratio of heads gets closer and closer to the true probability of heads.
 
+ \begin{itemize}
+ 	\item The ensemble methods work best when the predictors are \emph{independent} from one another. (\emph{diverse classifier})
+ 	
+ 	\item One solution to get diverse classifiers is to train them using \emph{very different algorithms}.
+ 	
+ 	\item Another solution is to use the same training algorithm but different random subsets of the training data. For example, bagging (sampling with replacement) and pasting (sampling without replacement).
+ \end{itemize}
+\subsection{Voting classifiers}
+\begin{enumerate}
+\item Hard voting classifier: Create a classifier by aggregating the prediction of each classifier (e.g., logistic regression, SVM, random forest, KNN ...) and predict the class that gets the most votes.
+
+
+\item Soft voting classifier: estimate class probabilities of each classifier for each class, predict by using the highest probability. (gives more weight on highly confident votes).
+\end{enumerate}
 \subsection{Bagging and Pasting}
+Can be trained in parallel.
+
+\textbf{Steps}:
+\begin{enumerate}
+\item Training: Bagging (sampling with replacement, one training instance can be sampled more than one time for each classifier/prediction) and pasting (sampling without replacement).
+\item Ensemble: aggregate the predictions of all predictors by statistical mode (for classification) or average (for regression).
+\end{enumerate}
+
+\textbf{Bias and variance}: the bias of each predictor is high, but aggregation reduces both bias and variance.  Net result is that \emph{the ensemble has a similar bias but a lower variance than a single predictor training on the original data.}\\~\\
+
+\textbf{Comparison of bagging and pasting}:
+\begin{enumerate}
+\item Bagging (bootstrapping) introduces a bit more diversity in the subsets, so bagging ends up with a slightly \emph{higher bias} than pasting.
+
+\item  But it also means that predictors are less correlated, so the ensemble variance is reduced. 
+\item To conclude, bagging often has better models, generally preferred. 
+\end{enumerate}
+
+\textbf{Evaluation}: use the out-of-bag (oob) training instances to evaluate the ensemble by averaging out the oob evaluations of each predictor. 
+
 
 \subsection{Random Patches and Random Subspaces}
 
-\subsection{Random Forests}
+\begin{enumerate}
+\item Random patches: sampling both training instances and features. 
+\item Random subspaces: only sampling features.
+\end{enumerate}
 
+\subsection{Random Forests (RF)}
+RF is an ensemble of decision trees. RF introduces extra randomness and diversity than bagging by searching for the best feature in a random \emph{subset of features}. \\
+Intuition: The reason for doing this is the correlation of the trees in an ordinary bootstrap sample: if one or a few features are very strong predictors for the response variable (target output), these features will be selected in many of the B trees, causing them to become correlated(\href{https://en.wikipedia.org/wiki/Random_forest#From_bagging_to_random_forests}{Wiki}). 
+
+\textbf{Bias and variance}: RF results in a higher bias with lower variance, generally yielding an overall better model.
+
+\textbf{Extra tree}: More randomness is added. Based on RF, use random thresholds for each feature rather than searching for it.  Much faster as the time to search splitting threshold is saved.
+
+\textbf{Usage of RF}:
+\begin{enumerate}
+\item Make predictions. 
+\item Feature importance when doing feature selection: measure how much the tree nodes that uses one specific feature could reduce impurity on (weighted by number of training samples associated with it) average. 
+\end{enumerate}
 \subsection{Boosting} 
+Idea: train predictors sequentially, each trying to correct its predecessor. 
 
+\subsubsection{AdaBoost}
+Idea: pay a bit more attention to the training instances that the predecessor underfitted $\Rightarrow$ new predictors focus more and more on the hard cases. \\~\\
+
+For the $j$-th predictor, 
+\begin{enumerate}
+\item Fit a base classifier (e.g., a decision tree with max\_depth = 1, decision stump), initialize the equal weights $w_i = 1/n$ for each instance $i$ when $j=1$, or
+
+\begin{equation}
+w_i = \left\{ 
+\begin{array}{ll}
+w_i & \\
+w_i \textrm{exp}(\alpha_j) & \textrm{if $\hat{y}_i^j = y_i$}
+\end{array}
+\right.
+\end{equation}
+\\~\\
+
+\item Update the weighted error rate,
+\begin{equation}
+r_j = \frac{\sum_{i=1, \hat{y}_i^j \neq y_i}^{n}w_i}{\sum_{i=1}^{n}w_i},
+\end{equation}
+where $y_i^j$ is the $j$-th predictor's prediction for the $i$-th instance.
+
+
+\item Update predictor $j$'s weight
+
+\begin{equation}
+\alpha_j = \eta \log \frac{1 - r_j}{r_j},
+\end{equation}
+where $\eta$ is learning rate. 
+
+\item Stop when desired number of predictors is reached, or a perfect predictor is found. 
+
+\item Make final predictions 
+
+\begin{equation}
+\hat{y}(x) = \argmax{k} \sum_{j = 1, \hat{y}_i^j = k} \alpha_j
+\end{equation}
+\end{enumerate} 
+
+\textbf{Overfitting} of AdaBoost: try reducing the number of estimators or more strongly regularization on base estimator. 
+
+
+\subsubsection{Gradient Boosting}
+
+Idea: fit the new predictor to the \emph{residual errors} made by the previous predictor. 
+
+
+\begin{itemize}
+\item Robust to overfitting.
+\end{itemize}
+
+\subsection{XgBoost}
+
+\href{https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf}{Slides}.
 \subsection{Stacking}
-
-
-\section{Dimensionality Reduction}
+Train a model to perform the aggregation of different predictors (use the predictions from each predictor as input).
+\section{Dimensionality Reduction (DR)}
+DR can be used to 
+\begin{itemize}
+\item speed up training
+\item data visualization
+\end{itemize}
 
 \subsection{PCA}
 
