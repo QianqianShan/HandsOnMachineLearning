@@ -1,7 +1,7 @@
 \documentclass[12pt,oneside,a4paper]{article}
 \usepackage{amssymb} % blackbaord bold 
 \usepackage{amsmath} % for modulo function
-
+\usepackage[left=2.5cm, right=2.5cm, top=3cm]{geometry}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{listings}
@@ -14,6 +14,7 @@
 %\usepackage{undertilde}
 \usepackage{stackengine}
 \usepackage{fancyhdr}
+%\def\baselinestretch{1.0}
 \pagestyle{fancy}
 % with this we ensure that the chapter and section
 % headings are in lowercase.
@@ -35,6 +36,7 @@
 \newcommand{\bfr}{\boldsymbol{r}}
 \newcommand{\bfu}{\boldsymbol{u}}
 \newcommand{\bfv}{\boldsymbol{v}}
+\newcommand{\bfw}{\boldsymbol{w}}
 \newcommand{\bfx}{\boldsymbol{x}}
 \newcommand{\bfz}{\boldsymbol{z}}
 \newcommand{\bfy}{\boldsymbol{y}}
@@ -615,6 +617,73 @@ Assumption:
 \item The task at hand (e.g., classification and regression) will be simpler if expressed in the lower-dim space of the manifold.
 \end{itemize}
 
-One technique: locally linear embedding (LLE), a non-linear dimensionality reduction.
+One technique: locally linear embedding (LLE), a non-linear dimensionality reduction. Idea: first measure how each training instance linearly related to its closest neighbors, and then look for a low-dim representation of the training set where these local relationships are best preserved.
+
+\section{Tensorflow}
+
+\section{Introduction ot Artificial Neural Networks}
+
+Artificial neural networks (ANN) is at the very core of deep learning. It's versatile, powerful and scalable, making it ideal to tackle large and highly complex ML tasks such as classifying billions of images, powering speech recognition, recommending videos etc. Reasoning of why the current deep learning wave will have a more profound impact: 
+
+\begin{itemize}
+\item There are a huge quantity of data available nowadays and ANNs often outperform other ML techniques on very large complex data sets. 
+\item The tremendous increase in computing power since 1990s makes it possible to train large neural networks in a reasonable amount of time.
+
+\item Small tweaks of the algorithms used in 1990s turn out to have a huge positive impact. 
+
+\item Theoretical limitations of ANNs are benign in practice. For example, people may think ANN training algorithms are likely to get stuck in local optima, however, it turns out to be rare in practice.  
+\end{itemize}
+\subsection{Perceptron}
+\begin{enumerate}
+\item Linear threshold unit (LTU) (Fig.10-4 on page 257): Each input is associated with a weight and LTU computes a weighted sum of its inputs ($z = \bfw^T \bfx$) and applies a step function to this sum for an output, 
+
+\begin{equation}
+\sigma(\bfz) = f(\bfw^T \bfx).
+\end{equation}
+
+\textbf{Popular activation functions for \textit{hidden layers}}:
+\begin{itemize}
+\item Logistic function, 
+\begin{equation}
+\sigma(\bfz) = \frac{1}{1 + \exp(-\bfz)},
+\end{equation}
+it has well-defined nonzero derivative everywhere, allowing gradient descent to make a progress at every step.
+
+\item Hyperbolic tangent function, 
+\begin{equation}
+\textrm{tan h} (\bfz) = 2 \sigma(2 \bfz) - 1,
+\end{equation}
+where $\sigma(\cdot)$ is the logistic function as above. It's continuous, differentiable and outputs range in $[-1, 1]$.
+
+\item ReLU function,
+\begin{equation}
+\max (0, \bfz),
+\end{equation} 
+even it's not differentiable at 0, it is fast to compute, and it doesn't have a max output (which reduces issues such as stucking on plateaus during GD).
+\end{itemize}
+
+\item Perceptron: a single layer of LTUs. Each LTU neuron is connected to all inputs (input neurons and optional a bias neuron, $x_0 = 1$) (Fig. 10-5 on page 258). 
+
+\item Multi-layer perceptron (MLP) is composed of input layer (passthrough), one or more layers of LTUs (hidden layers) and a final layer of LTUs (output layer). It's called deep neural network (DNN) when there are two or more hidden layers.
+
+\begin{itemize}
+\item Back-propagation algorithm for training MLP: first make a prediction (forward pass), measures the error, then goes through each layer to reverse to measure the error contribution from each connection (reverse pass), and finally slightly tweaks the connection weights to reduce the error (gradient descent). 
+\end{itemize}
+\end{enumerate}
+\subsection{Fine-Tunning Neural Network Hyperparameters}
+\subsubsection{Number of hidden layers}
+Deep networks have a higher parameter efficiency than shallow ones as they can model complex functions using \emph{exponentially} fewer neurons than shallow nets. So it can be mush \textbf{faster} to train.
+
+\textit{The logic behind it: \\ Real world data is often structured in a hierachical way and DNNs automatically take the advantage of this fact: lower hidden layers model lowe-level structures, intermediate hidden layers combine these low-level structures to model intermediate-level structures, and highest hidden layers and the ouput layer combine these itermediate structures to model high-level structures.}
+
+To conclude, for complex problems, one can gradually ramp up the number of hidden layers until overfitting. Re-use of pre-trained networks that performs similar tasks could also make the training much faster.
+
+\subsubsection{Number of neurons per hidden layer}
+
+A common practice is to form a funnel, with fewer and fewer neurons at each layer. 
+
+\textit{The logic behind it: \\ Low-level features can coalesce into far fewer high-level features.}
+
+One can increase the number neurons gradually until the network starts overfitting. Or starts with a model with more layers and neurons than needed and use early stopping to prevent it from overfitting.
 \end{document}
 
