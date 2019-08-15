@@ -90,7 +90,7 @@
 \newcommand{\rms}[1]{\textrm{#1}}
 \newcommand{\wh}[1]{\widehat{#1}}
 \author{Qianqian Shan}
-\title{Studying \emph{Hands-on Machine Learning with Scikit-Learn and Tensorflow} by Aurelien Geron}
+\title{Studying \emph{Machine Learning}}
 \date{\vspace{-5ex}}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
@@ -101,7 +101,12 @@
 \tableofcontents
 
 \section*{Preface}
-The following contents contain study notes of Qianqian Shan for book \emph{Hands-on Machine Learning with Scikit-Learn and Tensorflow}. To learn more about the book, please see  \href{http://shop.oreilly.com/product/0636920052289.do}{http://shop.oreilly.com/product}. 
+The following contents contain 
+\begin{enumerate}
+\item Study notes of Qianqian Shan for book \emph{Hands-on Machine Learning with Scikit-Learn and Tensorflow}. To learn more about the book, please see \\ \href{http://shop.oreilly.com/product/0636920052289.do}{http://shop.oreilly.com/product}. 
+\end{enumerate}
+ 
+
 \section{The Machine Learning (ML) Landscape}
 
 \subsection{Introduction}
@@ -182,6 +187,32 @@ Reasons for using ML:
 \item \emph{Validation}: use validation to choose hyperparameters of the model. Common technique is \emph{cross validation}.
 \end{enumerate}
 
+\subsection{Frequentist vs Bayesian}
+Reference is \href{http://www.statisticalengineering.com/frequentists_and_bayesians.htm}{here}.
+Frequentist:
+\begin{enumerate}
+\item Probability is the long-run expected frequency of occurrence. 
+\begin{equation}
+\Pr (A) = \frac{n}{N}
+\end{equation}
+
+\item Assume that the probability parameter to be estimated is fixed (no probability distribution), while the data is random with a distribution, and the uncertainty on the parameter is caused by the limited times of data observations.
+
+\item When data is given, can estimate the parameters with maximum likelihood estimation. (given the fixed parameter, maximize the probability to have the current data).
+
+\item In machine learning, frequentist statistics correspond to statistical learning, find the optimized model by minimizing the empirical risk (e.g., misclassification rate, rmse).
+\end{enumerate}
+
+Bayesian:
+\begin{enumerate}
+\item Probability is related to degree of belief.  It is a measure of the plausibility of an event given incomplete knowledge.
+
+\item Assume that the parameters to be estimated are random (with a prior distribution), and the data are real and fixed.
+
+\item With given data, maximize the posterior distribution of parameters to obtain the distribution of parameters. 
+
+\item In machine learning, Bayesian statistics 
+\end{enumerate}
 \section{End-to-End Machine Learning Project}
 Go through an example project. 
 \begin{enumerate}
