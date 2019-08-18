@@ -306,6 +306,7 @@ recall = \frac{TP}{TP + FN},
 recall is also called sensitivity, or true positive rate (TPR): the ratio of positive instances that are correctly detected by the classifier. 
 
 \begin{itemize}
+\item Check the Precision (y) - Recall (x) curve to find models.
 \item It's convenient to combine precision and recall into a single metric, $F_1$, the harmonic mean of precision and recall: 
 
 \begin{equation*}
@@ -320,9 +321,19 @@ F_1 = \frac{2}{\frac{1}{precision} + \frac{1}{recall}}.
 \item ROC curve 
 
 \begin{enumerate}
-\item Receiver operating characteristic (ROC) curve is used with binary classifiers. It's true positive rate $TP/(TP + FN)$ vs false postive rate $FP/(TN + FP)$.
+\item Receiver operating characteristic (ROC) curve is used with binary classifiers. It's true positive rate $TP/(TP + FN)$ (or $y$) vs false postive rate $FP/(TN + FP)$ (or $x$).
 \item One way to compare the classifiers is to measure the area under curve (AUC). A perfect classifier has ROC AUC equals $1$.
 
+\item If the true position ratio in sample is known ($p = \frac{(TP)}{TP + TN + FP + FN}$), then accuracy can be represented as 
+\begin{equation}
+p * TPR + (1-p) * (1 - FPR),
+\end{equation}
+we could then draw iso-accuracy lines in parallel in ROC and move it from top left to bottom right, the first intersection of these lines with ROC indicates the best model based on the current prior knowledge and accuracy. 
+\item The imbalanced number of data in different classes will also affect the choice of ROC or PR curve. 
+\begin{quote}
+Precision is more focused in the positive class than in the negative class, it actually measures the probability of correct detection of positive values, while FPR and TPR (ROC metrics) measure the ability to distinguish between the classes.
+\end{quote} 
+See more at \href{https://towardsdatascience.com/what-metrics-should-we-use-on-imbalanced-data-set-precision-recall-roc-e2e79252aeba}{here}.
 \item Rule of thumb to choose between precision/recall (PR) curve and ROC: when you care more about false positives than the false negatives, you should prefer PR curve. 
 \end{enumerate}
 \end{enumerate}
