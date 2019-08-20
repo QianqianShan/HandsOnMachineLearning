@@ -244,20 +244,31 @@ The higher the norm index, the more it focuses on \emph{large values}. So RMSE i
 \item Check assumptions that have been made before proceeding. 
 \end{enumerate}
 \item Get the data \\
-Create test set before exploring any patterns on the data possibly on the test set.
+Create test set before exploring any patterns on the data (possibly on the test set).
 \begin{enumerate}
 \item Random sampling
 \item Stratified sampling
 \end{enumerate}
 \item Discover and visualize the data to gain insights, see jupyter notebook of chapter 2 at \href{https://github.com/QianqianShan/HandsOnMachineLearning}{my Github}. 
-\item Prepare the data for ml algorithms 
+\item Prepare the data for ml algorithms (feature engineering)
 \begin{enumerate}
-\item Deal with missing values (drop data with NA values; drop columns with NA values; impute the missing values)
+\item Deal with missing values (drop data with NA values; drop columns with NA values; impute the missing values: K-means, linear iterpolation,...))
 \item Convert categorical variables to numerical (code different categories with reasonable numerical values; binary coding (0-1))
 \item Scaling 
 \begin{enumerate}
 \item Min-max scaling (normalization), shift and rescale data so they end up ranging from 0 to 1 (or other ranges). 
-\item Standardization: subtracts mean and divide standard deviation. Ranges may not be 0 to 1, but more robust to outliers.
+\begin{equation}
+x^\ast = \frac{x - min(x)}{range(x)}
+\end{equation}
+\item Standardization: subtracts mean and divide standard deviation (so standardized values have mean zero and variance 1). Ranges may not be 0 to 1, but more robust to outliers.
+\begin{equation}
+x^\ast = \frac{x - \bar{x}}{sd(x)}
+\end{equation}
+\end{enumerate}
+\item Skewness (measure of the asymmetry of the probability distribution): if the data is skewed, check the reason and take action
+\begin{enumerate}
+\item if it's caused by outliers, depending one the reliability of the data, can remove outliers/use spatial sign ($x_{ij}^\ast = \frac{x_{ij}}{\sum_{j=1}^{m}x_{ij}^2}$) to normalize features for sample $i$.
+\item or take log/square root/inverse transformations on the features.
 \end{enumerate}
 \end{enumerate}
 \item Select a model and train it : use cross validation. 
@@ -636,22 +647,28 @@ Idea: fit the new predictor to the \emph{residual errors} made by the previous p
 \subsection{Stacking}
 Train a model to perform the aggregation of different predictors (use the predictions from each predictor as input).
 \section{Dimensionality Reduction (DR)}
+Often need to do feature selection (select from original features) or feature extraction (construct new features from original features) due to curse of dimensionality given \textbf{fixed} number of samples.
 DR can be used to 
 \begin{itemize}
 \item speed up training
 \item data visualization
 \end{itemize}
 
-\subsection{PCA}
+\subsection{PCA (linear)}
 \begin{itemize}
 \item SVD 
+\begin{equation}
+X = UDV^T
+\end{equation}
+
 \item Reduce dimension 
-\item (Image) compression
+\item Principal component ($X\boldsymbol{v}_j$ as input) regression example (image) compression
+\item Probabilistic principal component analysis thinks principal analysis as the linear relationship between observed Gaussian values ($y$) and the \emph{latent} Gaussian variables. 
 \item Incremental PCA: split the training set into mini-batches and feed an IPCA algorithm one mini-batch at a time (solve the problem that data size may be too big to fit in the memory).
 \item Randomized PCA: use a stochastic algorithm to quickly find an approximation of the first $d$ principal components. 
 \item Kernel PCA: perform nonlinear projections. Good at preserving clusters of instances after projection. 
 \end{itemize}
-\subsection{Manifold Learning}
+\subsection{Manifold Learning (can be non-linear)}
 Definition: a $d$-dimensional manifold is a part of an $n$-dimensional space ($d < n$) that locally resembles a $d$-dimensional hyperplane. For example, a 2d manifold is a 2d shape that can be bent and twisted in a higher-dimensional space ($d = 2, n = 3$).
 \\~\\
 Assumption: 
@@ -662,6 +679,8 @@ Assumption:
 
 One technique: locally linear embedding (LLE), a non-linear dimensionality reduction. Idea: first measure how each training instance linearly related to its closest neighbors, and then look for a low-dim representation of the training set where these local relationships are best preserved.
 
+
+To summarize, the linear PCA tries to find where the differences in data are from, can remove the possible co-linearity among features; manifold learning tries to find the representation of data in a lower dimension structure.
 \section{Tensorflow}
 
 \section{Introduction ot Artificial Neural Networks}
