@@ -414,7 +414,8 @@ J(\Theta) = - \frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K} y_k^{i} \log (\hat{p}_k^
 \end{equation}
 
 \section{Support Vector Machines (SVM)}
-SVM is capable of performing linear/nonlinear classification, regression, and even outlier detection. It's well suited for small- or medium-sized datasets.
+SVM is capable of performing linear/nonlinear classification, regression, and even outlier detection. It's well suited for small- or medium-sized datasets. It's trying to optimize the decision hyperplane (or margin), not the probabilities. \textbf{Margin} and \textbf{duality} are two key concepts in SVM.
+
 \subsection{Linear SVM Classification}
 It's also called largest margin classification: SVM classifier fit the widest street between classes.
 
@@ -448,7 +449,7 @@ where $l$ is the landmark location. Cons: may be computational expensive when th
 \end{enumerate}
 \subsection{SVM Regression}
 
-SVMR tries to fit as many instances as possible \emph{on the street} while limiting the margin violations (i.e., instances off the street), and the width of the street is controlled by a hyper-parameter.
+SVMR tries to fit as many instances as possible \emph{on the street} while limiting the margin violations (i.e., instances off the street), and the width of the street is controlled by a hyper-parameter. 
 
 \subsection{Outlier detection}
 See \href{https://scikit-learn.org/stable/modules/outlier_detection.html}{$scikit-learn.org/stable/modules/outlier\_detection.html$} for details on outlier detection with scikit-learn. The idea is: the outliers/anomalies cannot form a dense cluster as available estimators assume that the outliers/anomalies are located in low density regions, is unsupervised anomaly detection.
@@ -459,9 +460,12 @@ For soft margin maximization, add relaxation/slack factor $\epsilon_i$ for each 
 \argmin{w,b}\frac{1}{2}||\beta||^2 + c \sum_{i=1}^{n}\epsilon_i\textrm{ with } y_i(w^T\Phi(x_i) + b) \ge 1 - \epsilon_i,
 \end{equation}
 that is, $\epsilon_i \ge 1- y_i(w^T\Phi(x_i) + b) $, which results in hinge loss
+
 \begin{equation}
-\rmmax{}(0, 1- y_i(w^T\Phi(x_i) + b)).
+\rmmax{}(0, 1- y_i \cdot (w^T\Phi(x_i) + b)).
 \end{equation}
+
+The correct classifications won't contribute to hinge loss.
 
 \section{Decision Trees}
 Decision trees are versatile and also the fundamental components of random forests. 
@@ -483,6 +487,8 @@ where $G_{i}$ is the impurity of subsets, $n_{i}$ is the number of instances in 
 J(k, t_k)= \frac{n_{left}}{n} MSE_{left} + \frac{n_{right}}{n} MSE_{right},
 \end{equation}
 where $MSE_{node} = \sum_{i \in node} (y_i - \wh{y}_{node})^2$ and $\wh{y}_{node} = \frac{1}{n_{node}}\sum_{i \in node} y_i$.
+
+\item CART is a greedy algorithm, can cannot guarantee an optimal solution.
 \end{enumerate}
 
 \item Complexity:
@@ -520,7 +526,7 @@ Comparison:
 \begin{enumerate}
 \item Sensitive to training set rotation: decision trees love orthogonal decision boundaries (splits are perpendicular to an axis). \emph{Solution}: may use PCA to obtain a better orientation of the data. 
 
-\item Very sensitive to small variations in the training data, especially when a stochastic method is used to train the data. \emph{Solution}: random forest.
+\item Very sensitive to small variations in the training data, especially when a stochastic method is used to train the data. \emph{Solution}: random forest. \emph{Solution}: use random forests to limit this instability by averaging predictions over many trees. 
 \end{enumerate}
 \end{enumerate}
 
