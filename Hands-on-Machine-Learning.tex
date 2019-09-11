@@ -131,10 +131,10 @@ Reasons for using ML:
 \item Clustering (k-means, hierarchical clustering, EM algorithm)
 \item \emph{Visualization and dimension reduction} (principal component analysis (PCA), kernel PCA, locally-linear embedding(LLE)
 \item Association rule learning (apriori, eclat)
-\item Anomaly detection: for example, detect usual transactions, defects of products, outliers of a data set and so on.  
+\item Anomaly detection: for example, detect unusual transactions, defects of products, outliers of a data set and so on.  
 \end{enumerate}
 \item Semi-supervised: training data are partially labeled. For example, for photo-hosting services, there is only one label per person but may have multiple photos per person that could be clustered (unsupervised), one can label each person in the photos (supervised, one photo may have multiple persons) for the purpose of searching photos. Most semi-supervised learning algorithms are combinations of unsupervised and supervised algorithms.
-\item Reinforcement Learning: very \textbf{different} with other types. The learning system (agent) can observe the environment and perform actions, and get \emph{rewards} in tern (or \emph{penalties} for negative rewards). It learns by itself for best strategy (policy) to get the most reward over time. For example, Deepmind's AlphaGo.
+\item Reinforcement Learning: very \textbf{different} with other types. The learning system (agent) can observe the environment and perform actions, and get \emph{rewards} in turn (or \emph{penalties} for negative rewards). It learns by itself for best strategy (policy) to get the most reward over time. For example, Deepmind's AlphaGo.
 \end{enumerate}
 
 \item Based on whether or not ML systems can learn incrementally on the fly:
@@ -171,13 +171,18 @@ Reasons for using ML:
 \item Feature extraction: combine existing features to produce more useful ones 
 \item Create new features by gathering new data
 \end{itemize}
-\item Overfitting of data: model performs well on training data but does not generalize well. It usually happens when the model is too complex relative to the amount of noise of the training data. Possible solutions 
+\item Overfitting of data: model performs well on training data but does not generalize well. It usually happens when the model is too complex relative to the amount of noise of the training data. Possible solutions: 
 \begin{itemize}
 \item Simplify the model by selecting fewer parameters / reducing number of attributes in the training data / constraining the model (regularization).
-\item Gather more training data 
+\item Gather more training data. 
 \item Reduce noise in the training data (fix data errors and remove outliers).
 \end{itemize}
 \item Underfitting the training data.
+\begin{itemize}
+\item Select a more powerful model. 
+\item Feed better features to the learning algorithm (feature engineering).
+\item Reduce the constrains on the model (e.g., reduce the regularization hyperparameter).
+\end{itemize}
 \end{itemize}
 \end{enumerate}
 \subsection{Testing and Validation}
@@ -333,9 +338,9 @@ F_1 = \frac{2}{\frac{1}{precision} + \frac{1}{recall}}.
 
 \begin{enumerate}
 \item Receiver operating characteristic (ROC) curve is used with binary classifiers. It's true positive rate $TP/(TP + FN)$ (or $y$) vs false postive rate $FP/(TN + FP)$ (or $x$).
-\item One way to compare the classifiers is to measure the area under curve (AUC). A perfect classifier has ROC AUC equals $1$.
+\item One way to compare the classifiers is to measure the area under curve (AUC). A perfect classifier has ROC with AUC equals $1$.
 
-\item If the true position ratio in sample is known ($p = \frac{(TP)}{TP + TN + FP + FN}$), then accuracy can be represented as 
+\item If the true positive ratio in sample is known ($p = \frac{(TP)}{TP + TN + FP + FN}$), then accuracy can be represented as 
 \begin{equation}
 p * TPR + (1-p) * (1 - FPR),
 \end{equation}
@@ -345,7 +350,7 @@ we could then draw iso-accuracy lines in parallel in ROC and move it from top le
 Precision is more focused in the positive class than in the negative class, it actually measures the probability of correct detection of positive values, while FPR and TPR (ROC metrics) measure the ability to distinguish between the classes.
 \end{quote} 
 See more at \href{https://towardsdatascience.com/what-metrics-should-we-use-on-imbalanced-data-set-precision-recall-roc-e2e79252aeba}{here}.
-\item Rule of thumb to choose between precision/recall (PR) curve and ROC: when you care more about false positives than the false negatives, you should prefer PR curve. 
+\item Rule of thumb to choose between precision/recall (PR) curve and ROC: when positive class is rare, or when you care more about false positives than the false negatives, you should prefer PR curve. 
 \end{enumerate}
 \end{enumerate}
 
@@ -378,6 +383,8 @@ GD is a generic optimization algorithm of finding optimal solutions to a wide ra
 \begin{enumerate}
 \item  To find a good learning rate $\eta$, use grid search. Batch gradient descent with a fixed learning rate has a convergence rate $O(\frac{1}{iterations})$.
 
+\item One should ensure that all features \textbf{have a similar scale}, or else it will take much longer to converge.
+
 \item \emph{Stochastic gradient descent}: pick a random instance in the training set at every step and computes the gradients based ONLY on that single instance. 
 
 \begin{enumerate}
@@ -401,6 +408,14 @@ GD is a generic optimization algorithm of finding optimal solutions to a wide ra
 \end{enumerate}
 \end{enumerate}
 
+\subsection{Bias/Variance Tradeoff}
+A model's generalization error can be expressed as the sum of:
+
+\begin{enumerate}
+\item Bias: due to wrong assumptions. For example, when the data are actually quadratic, we assume linear relationship. 
+\item Variance: due to the model's excessive sensitivity to small variations in the training data. A model with many degrees of freedom (e.g., polynomial regression model) is likely to have high variance. 
+\item Irreducible error: due to the noiseness of the data itself. The only way to reduce this kind of error is to clean up the data. 
+\end{enumerate}
 \subsection{Regularized Linear Models}
 See Chapter 3 of \href{https://qianqianshan.com/post/elementsofstatisticallearning/}{https://qianqianshan.com/post/esl} for regularization and logistic regression.
 
@@ -413,6 +428,7 @@ Cross entropy cost function is minimized
 J(\Theta) = - \frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K} y_k^{i} \log (\hat{p}_k^i).
 \end{equation}
 
+Softmax function is used to compute the probability that one instance belongs to a specific class.
 \section{Support Vector Machines (SVM)}
 SVM is capable of performing linear/nonlinear classification, regression, and even outlier detection. It's well suited for small- or medium-sized datasets. It's trying to optimize the decision hyperplane (or margin), not the probabilities. \textbf{Margin} and \textbf{duality} are two key concepts in SVM.
 
@@ -462,7 +478,7 @@ For soft margin maximization, add relaxation/slack factor $\epsilon_i$ for each 
 that is, $\epsilon_i \ge 1- y_i(w^T\Phi(x_i) + b) $, which results in hinge loss
 
 \begin{equation}
-\rmmax{}(0, 1- y_i \cdot (w^T\Phi(x_i) + b)).
+\rmmax{}\left(0, 1- y_i \cdot \left[w^T\Phi(x_i) + b\right]\right).
 \end{equation}
 
 The correct classifications won't contribute to hinge loss.
@@ -527,6 +543,8 @@ Comparison:
 \item Sensitive to training set rotation: decision trees love orthogonal decision boundaries (splits are perpendicular to an axis). \emph{Solution}: may use PCA to obtain a better orientation of the data. 
 
 \item Very sensitive to small variations in the training data, especially when a stochastic method is used to train the data. \emph{Solution}: random forest. \emph{Solution}: use random forests to limit this instability by averaging predictions over many trees. 
+
+\item Low bias but high variance.
 \end{enumerate}
 \end{enumerate}
 
@@ -543,6 +561,8 @@ Law of large numbers: if you keep tossing a biased coin, the ratio of heads gets
  	
  	\item Another solution is to use the same training algorithm but different random subsets of the training data. For example, bagging (sampling with replacement) and pasting (sampling without replacement).
  \end{itemize}
+
+\textbf{Ensemble usually has a similar bias but lower variance than a single predictor trained on the original data}.
 \subsection{Voting classifiers}
 \begin{enumerate}
 \item Hard voting classifier: Create a classifier by aggregating the prediction of each classifier (e.g., logistic regression, SVM, random forest, KNN ...) and predict the class that gets the most votes.
@@ -583,7 +603,7 @@ Can be trained in parallel.
 RF is an ensemble of decision trees. RF introduces extra randomness and diversity than bagging by searching for the best feature in a random \emph{subset of features}. \\
 Intuition: The reason for doing this is the correlation of the trees in an ordinary bootstrap sample: if one or a few features are very strong predictors for the response variable (target output), these features will be selected in many of the B trees, causing them to become correlated(\href{https://en.wikipedia.org/wiki/Random_forest#From_bagging_to_random_forests}{Wiki}). 
 
-\textbf{Bias and variance}: RF results in a higher bias with lower variance, generally yielding an overall better model.
+\textbf{Bias and variance}: RF results in no higher bias with lower variance than a single decision tree, generally yielding an overall better model.
 
 \textbf{Extra tree}: More randomness is added. Based on RF, use random thresholds for each feature rather than searching for it.  Much faster as the time to search splitting threshold is saved.
 
