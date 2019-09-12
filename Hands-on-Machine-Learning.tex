@@ -417,8 +417,11 @@ A model's generalization error can be expressed as the sum of:
 \item Irreducible error: due to the noiseness of the data itself. The only way to reduce this kind of error is to clean up the data. 
 \end{enumerate}
 \subsection{Regularized Linear Models}
-See Chapter 3 of \href{https://qianqianshan.com/post/elementsofstatisticallearning/}{https://qianqianshan.com/post/esl} for regularization and logistic regression.
 
+See more in Chapter 3 of \href{https://qianqianshan.com/post/elementsofstatisticallearning/}{https://qianqianshan.com/post/esl} for regularization and logistic regression.
+
+
+Except for ridge, lasso, elastic net, a different way to regularize \emph{iterative learning algorithms} (e.g., GD) is to stop training as soon as the validation error reaches its minimum.
 
 \subsection{Logistic Regression}
 Generalize logistic regression to support \emph{multiple classes} directly without training and combining multiple binary classifiers. That is, \emph{softmax regression or multinomial logistic regression}.
@@ -427,8 +430,9 @@ Cross entropy cost function is minimized
 \begin{equation}
 J(\Theta) = - \frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K} y_k^{i} \log (\hat{p}_k^i).
 \end{equation}
+Softmax function is used to compute the probability that one instance belongs to a specific class. It penalizes the model when it estimates a low probability for a target class.
 
-Softmax function is used to compute the probability that one instance belongs to a specific class.
+
 \section{Support Vector Machines (SVM)}
 SVM is capable of performing linear/nonlinear classification, regression, and even outlier detection. It's well suited for small- or medium-sized datasets. It's trying to optimize the decision hyperplane (or margin), not the probabilities. \textbf{Margin} and \textbf{duality} are two key concepts in SVM.
 
@@ -438,13 +442,14 @@ It's also called largest margin classification: SVM classifier fit the widest st
 \begin{enumerate}
 \item \emph{Support vectors}: instances located on the edge of the ``street'' fully determines (supports) the decision boundary. 
 \item SVMs are sensitive to feature scales. 
+\item SVMs don't output probabilities for each class.
 \end{enumerate}
 Types of linear SVM:
 \begin{enumerate}
 \item Hard margin classification: all instances are off the street (margin) and on the correct side. 
 \begin{enumerate}
 \item works only if the data is linearly separable.
-\item Sensitive to outliers.
+\item Sensitive to outliers (e.g., even one outlier on the wrong side will make it impossible to separate). 
 \end{enumerate}
 
 \item Soft margin classification: find a good balance between keeping the street as large as possible and \emph{limiting the margin violations} (instances in the middle of the street or on the wrong side). Introduce slack variable $\epsilon_i$ for each instance for the conditions of the optimization problem.
@@ -625,8 +630,8 @@ For the $j$-th predictor,
 \begin{equation}
 w_i = \left\{ 
 \begin{array}{ll}
-w_i & \\
-w_i \textrm{exp}(\alpha_j) & \textrm{if $\hat{y}_i^j = y_i$}
+w_i & o.w.\\
+w_i \textrm{exp}(\alpha_j) & \textrm{if $\hat{y}_i^j \neq y_i$}
 \end{array}
 \right.
 \end{equation}
@@ -665,6 +670,7 @@ Idea: fit the new predictor to the \emph{residual errors} made by the previous p
 
 \begin{itemize}
 \item Robust to overfitting.
+\item Reduce bias.
 \end{itemize}
 
 \subsection{XgBoost}
